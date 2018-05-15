@@ -1,0 +1,15 @@
+C:\Repos\FileSelector\bin\Debug\FileSelector.dll.config
+C:\Repos\FileSelector\bin\Debug\FileSelector.dll
+C:\Repos\FileSelector\bin\Debug\FileSelector.pdb
+C:\Repos\FileSelector\obj\Debug\Style.baml
+C:\Repos\FileSelector\obj\Debug\FolderSelector.g.cs
+C:\Repos\FileSelector\obj\Debug\FileSelector_MarkupCompile.cache
+C:\Repos\FileSelector\obj\Debug\FileSelector_MarkupCompile.lref
+C:\Repos\FileSelector\obj\Debug\FolderSelector.baml
+C:\Repos\FileSelector\obj\Debug\FileSelector.g.resources
+C:\Repos\FileSelector\obj\Debug\FileSelector.Properties.Resources.resources
+C:\Repos\FileSelector\obj\Debug\FileSelector.csproj.GenerateResource.Cache
+C:\Repos\FileSelector\obj\Debug\FileSelector.dll
+C:\Repos\FileSelector\obj\Debug\FileSelector.pdb
+C:\Repos\FileSelector\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Repos\FileSelector\obj\Debug\FileSelector.csprojResolveAssemblyReference.cache
