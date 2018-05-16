@@ -26,28 +26,12 @@ namespace FileSelector
 		{
 			InitializeComponent();
 
-			//ObservableCollection<BaseItem> root = new ObservableCollection<BaseItem>();
-			// 			BaseItem root = new BaseItem("");
-			// 
-			// 			BaseItem temp = new BaseItem(@"C:\Temp");
-			// 			BaseItem ab = new BaseItem(@"C:\Temp\ab");
-			// 			BaseItem a = new BaseItem(@"C:\Temp\ab\a");
-			// 			BaseItem a1 = new BaseItem(@"C:\Temp\ab\a\a1.txt");
-			// 			BaseItem a2 = new BaseItem(@"C:\Temp\ab\a\a2.xlsx");
-			// 			BaseItem b = new BaseItem(@"C:\Temp\ab\b");
-			// 			BaseItem b1 = new BaseItem(@"C:\Temp\ab\b\b1.txt");
-			// 
-			// 			temp.Add(ab);
-			// 			ab.Add(a);
-			// 			ab.Add(b);
-			// 			a.Add(a1);
-			// 			a.Add(a2);
-			// 			b.Add(b1);
-			// 
-			// 			root.Add(temp);
+			DataContext = new ItemsManager().Root;
+		}
 
-			DataContext = new ItemsManager().Root;// root;
-			//DataContext = root;
+		private void btnClose_Click(object sender, RoutedEventArgs e)
+		{
+			Close();
 		}
 	}
 }

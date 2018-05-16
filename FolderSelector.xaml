@@ -25,15 +25,19 @@
 
         <TextBlock Margin="3">Select a folder:</TextBlock>
 
-        <TreeView Grid.Row="1" Margin="3, 0" x:Name="tvFolders" ItemsSource="{Binding Items, Mode=TwoWay}" HorizontalAlignment="Stretch">
+        <TreeView Grid.Row="1" Margin="3, 0" x:Name="tvFolders" ItemsSource="{Binding Items, Mode=TwoWay}" HorizontalAlignment="Stretch"
+                  BorderBrush="Gray">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                </Style>
+            </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local_data:BaseItem}" ItemsSource="{Binding Items, Mode=TwoWay}">
-                    <Border BorderBrush="Silver" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                            <Image Source="{Binding ItemIcon}" Stretch="None" Margin="0, 1" HorizontalAlignment="Center" />
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="3, 0" />
-                        </StackPanel>
-                    </Border>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                        <Image Source="{Binding ItemIcon}" Stretch="None" Margin="0, 1" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="3, 0" />
+                    </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
@@ -56,7 +60,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Width="110" Height="25">Make New Folder</Button>
+            <Button Width="110" Height="25" IsEnabled="False">Make New Folder</Button>
             <Button Grid.Column="2" Width="75" Height="25" Margin="3, 0">
                 OK
                 <Button.Style>
@@ -69,7 +73,7 @@
                     </Style>
                 </Button.Style>
             </Button>
-            <Button Grid.Column="3" Width="75" Height="25">Cancel</Button>
+            <Button x:Name="btnClose" Grid.Column="3" Width="75" Height="25" Click="btnClose_Click">Cancel</Button>
         </Grid>
     </Grid>
 </Window>

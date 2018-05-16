@@ -29,18 +29,17 @@ namespace FileSelector.Data
 				string name = "";
 				if (!string.IsNullOrEmpty(_path))
 				{
-					int lastIndexOfBackSlash = _path.LastIndexOf(@"\");
-					name = _path.Substring(lastIndexOfBackSlash + 1);
+					int numberOfBackslashes = _path.Replace("\\", "").Length;
+					int lastIndexOfBackSlash = _path.LastIndexOf("\\");
+
+					if (numberOfBackslashes > 2)
+						name = _path.Substring(lastIndexOfBackSlash + 1);
+					else
+						name = _path.Substring(0, lastIndexOfBackSlash - 1);
 				}
 
 				return name;
 			}
-
-// 			set
-// 			{
-// 				_name = value;
-// 				OnPropertyChanged("Name");
-// 			}
 		}
 
 		public string Path
@@ -68,9 +67,11 @@ namespace FileSelector.Data
 				_isExpanded = value;
 				OnPropertyChanged("IsExpanded");
 
-				if ((_isExpanded == true) && (_items.Count == 0))
-					LoadItemsContent();
-
+				if (_isExpanded == true)
+				{
+					foreach (BaseItem item in Items)
+						item.LoadItemsContent(false);
+				}
 			}
 		}
 
@@ -111,15 +112,45 @@ namespace FileSelector.Data
 		}
 
 
-		public BaseItem(string path)
+		public BaseItem(string path) : this(path, true)
 		{
-			Items = new ObservableCollection<BaseItem>();
-			Path = path;
+			
 		}
 
-		private void LoadItemsContent()
+		private BaseItem(string path, bool getNextLevel = false)
 		{
+			Path = path;
+			Items = new ObservableCollection<BaseItem>();
 
+			if (!string.IsNullOrEmpty(Path) && getNextLevel)
+				LoadItemsContent(false);
+		}
+
+		private void LoadItemsContent(bool getNextLevel = true)
+		{
+			string[] directories = null;
+
+			try
+			{
+				directories = System.IO.Directory.GetDirectories(Path);
+			}
+			catch(System.IO.IOException ioe)
+			{
+
+			}
+			catch(System.UnauthorizedAccessException uae)
+			{
+
+			}
+
+			if (directories != null)
+			{
+				foreach (string directory in directories)
+				{
+					BaseItem directoryItem = new BaseItem(directory, getNextLevel);
+					Items.Add(directoryItem);
+				}
+			}
 		}
 
 		#region INotifyPropertyChanged

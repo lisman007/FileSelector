@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +44,16 @@ namespace FileSelector.Data
 		public ItemsManager()
 		{
 			Root = new BaseItem("");
+			DriveInfo[] allDrives = DriveInfo.GetDrives();
 
+			foreach (DriveInfo drive in allDrives)
+			{
+				BaseItem driveItem = new BaseItem(drive.RootDirectory.FullName);
+				//driveItem.Items.Add(new BaseItem(@"C:\Temp"));
+				Root.Add(driveItem);
+			}
+
+			/*
 			BaseItem temp = new BaseItem(@"C:\Temp");
 			BaseItem ab = new BaseItem(@"C:\Temp\ab");
 			BaseItem a = new BaseItem(@"C:\Temp\ab\a");
@@ -59,7 +69,7 @@ namespace FileSelector.Data
 			a.Add(a2);
 			b.Add(b1);
 
-			Root.Add(temp);
+			Root.Add(temp);*/
 		}
 
 		#region INotifyPropertyChanged
