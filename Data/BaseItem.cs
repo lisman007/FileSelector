@@ -18,6 +18,7 @@ namespace FileSelector.Data
 		#region Data members
 		private string _path;
 		private bool _isExpanded = false;
+		private bool _isSelected = false;
 		private ObservableCollection<BaseItem> _items;
 		#endregion
 
@@ -35,7 +36,7 @@ namespace FileSelector.Data
 					if (numberOfBackslashes > 2)
 						name = _path.Substring(lastIndexOfBackSlash + 1);
 					else
-						name = _path.Substring(0, lastIndexOfBackSlash - 1);
+						name = _path.Substring(0, lastIndexOfBackSlash);
 				}
 
 				return name;
@@ -75,6 +76,20 @@ namespace FileSelector.Data
 			}
 		}
 
+		public bool IsSelected
+		{
+			get
+			{
+				return _isSelected;
+			}
+
+			set
+			{
+				_isSelected = value;
+				OnPropertyChanged("IsSelected");
+			}
+		}
+
 		public ObservableCollection<BaseItem> Items
 		{
 			get
@@ -86,6 +101,15 @@ namespace FileSelector.Data
 			{
 				_items = value;
 				OnPropertyChanged("Items");
+			}
+		}
+
+		public ImageSource ItemIcon
+		{
+			get
+			{
+				ImageSource icon = Utils.SystemIconManager.GetIcon(_path, true);
+				return icon;
 			}
 		}
 		#endregion
@@ -100,21 +124,39 @@ namespace FileSelector.Data
 				OnPropertyChanged("Items");
 			}
 		}
-		#endregion
-
-		public ImageSource ItemIcon
+		
+		public BaseItem Contains(string itemName)
 		{
-			get
+			if (Items.Count == 0)
+				LoadItemsContent(false);
+
+			foreach(BaseItem item in Items)
 			{
-				ImageSource icon = Utils.SystemIconManager.GetIcon(_path, true);
-				return icon;
+				if (item.Name == itemName)
+					return item;
 			}
+
+			return null;
 		}
 
+		public BaseItem Find(string path)
+		{
+			List<string> pathItems = path.Split('\\').ToList();
 
+			BaseItem foundItem = Find(pathItems);
+			if (foundItem != null)
+				foundItem.IsSelected = true;
+
+			return foundItem;
+		}
+			
+		
+		#endregion
+
+		#region CTORs
 		public BaseItem(string path) : this(path, true)
 		{
-			
+
 		}
 
 		private BaseItem(string path, bool getNextLevel = false)
@@ -125,7 +167,9 @@ namespace FileSelector.Data
 			if (!string.IsNullOrEmpty(Path) && getNextLevel)
 				LoadItemsContent(false);
 		}
+		#endregion
 
+		#region Private methods
 		private void LoadItemsContent(bool getNextLevel = true)
 		{
 			string[] directories = null;
@@ -152,6 +196,27 @@ namespace FileSelector.Data
 				}
 			}
 		}
+
+		private BaseItem Find(List<string> pathItems)
+		{
+			if (pathItems.Count >= 1)
+			{
+				BaseItem item = Contains(pathItems[0]);
+				if (item != null)
+				{
+					IsExpanded = true;  //Expand this, which is the item's parent
+
+					if (pathItems.Count == 1)
+						return item;
+
+					pathItems.RemoveAt(0);
+					return item.Find(pathItems);
+				}
+			}
+
+			return null;
+		}
+		#endregion
 
 		#region INotifyPropertyChanged
 		public event PropertyChangedEventHandler PropertyChanged;

@@ -22,6 +22,38 @@ namespace FileSelector
 	/// </summary>
 	public partial class FolderSelector : Window
 	{
+		#region Properties
+		public string SelectedPath
+		{
+			get;
+			private set;
+		}
+
+		public string InitialPath
+		{
+			set
+			{
+				string initialPath = value;
+				BaseItem foundItem = (DataContext as BaseItem).Find(initialPath);
+			}
+		}
+
+		public bool ShowNewFolderButton
+		{
+			get
+			{
+				return btnNewFolder.IsVisible;
+			}
+			set
+			{
+				if (value == false)
+					btnNewFolder.Visibility = Visibility.Hidden;
+				else
+					btnNewFolder.Visibility = Visibility.Visible;
+			}
+		}
+		#endregion
+
 		public FolderSelector()
 		{
 			InitializeComponent();
@@ -33,5 +65,19 @@ namespace FileSelector
 		{
 			Close();
 		}
+
+		private void btnOK_Click(object sender, RoutedEventArgs e)
+		{
+			SelectedPath = tbSelectedFolder.Text;
+			Close();
+		}
+
+		private void tvFolders_Selected(object sender, RoutedEventArgs e)
+		{
+			TreeViewItem tvi = e.OriginalSource as TreeViewItem;
+			tvi.BringIntoView();
+		}
+
+		
 	}
 }

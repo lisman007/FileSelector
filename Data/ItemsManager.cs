@@ -49,27 +49,24 @@ namespace FileSelector.Data
 			foreach (DriveInfo drive in allDrives)
 			{
 				BaseItem driveItem = new BaseItem(drive.RootDirectory.FullName);
-				//driveItem.Items.Add(new BaseItem(@"C:\Temp"));
 				Root.Add(driveItem);
 			}
+		}
 
-			/*
-			BaseItem temp = new BaseItem(@"C:\Temp");
-			BaseItem ab = new BaseItem(@"C:\Temp\ab");
-			BaseItem a = new BaseItem(@"C:\Temp\ab\a");
-			BaseItem a1 = new BaseItem(@"C:\Temp\ab\a\a1.txt");
-			BaseItem a2 = new BaseItem(@"C:\Temp\ab\a\a2.xlsx");
-			BaseItem b = new BaseItem(@"C:\Temp\ab\b");
-			BaseItem b1 = new BaseItem(@"C:\Temp\ab\b\b1.txt");
+		public bool Find(string path)
+		{
+			bool doesPathExisit = System.IO.Directory.Exists(path);
+			if (doesPathExisit)
+			{
+				string[] splittedPath = path.Split('\\');
 
-			temp.Add(ab);
-			ab.Add(a);
-			ab.Add(b);
-			a.Add(a1);
-			a.Add(a2);
-			b.Add(b1);
+				foreach(string item in splittedPath)
+				{
+					//Root.
+				}
+			}
 
-			Root.Add(temp);*/
+			return false;
 		}
 
 		#region INotifyPropertyChanged

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FileSelector"
         xmlns:local_data="clr-namespace:FileSelector.Data"
-        Title="Folder Selector" Height="300" Width="300">
+        Title="Folder Selector" Height="400" Width="500">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -26,10 +26,11 @@
         <TextBlock Margin="3">Select a folder:</TextBlock>
 
         <TreeView Grid.Row="1" Margin="3, 0" x:Name="tvFolders" ItemsSource="{Binding Items, Mode=TwoWay}" HorizontalAlignment="Stretch"
-                  BorderBrush="Gray">
+                  BorderBrush="Gray" TreeViewItem.Selected="tvFolders_Selected">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
@@ -60,8 +61,8 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Width="110" Height="25" IsEnabled="False">Make New Folder</Button>
-            <Button Grid.Column="2" Width="75" Height="25" Margin="3, 0">
+            <Button x:Name="btnNewFolder"  Width="110" Height="25" IsEnabled="False">Make New Folder</Button>
+            <Button x:Name="btnOK" Grid.Column="2" Width="75" Height="25" Margin="3, 0" Click="btnOK_Click">
                 OK
                 <Button.Style>
                     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
