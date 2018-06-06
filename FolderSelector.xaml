@@ -42,7 +42,7 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-
+        
         <Grid Grid.Row="2" Margin="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
