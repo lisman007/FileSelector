@@ -61,7 +61,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button x:Name="btnNewFolder"  Width="110" Height="25" IsEnabled="False">Make New Folder</Button>
+            <Button x:Name="btnNewFolder"  Width="110" Height="25" Visibility="Hidden">Make New Folder</Button>
             <Button x:Name="btnOK" Grid.Column="2" Width="75" Height="25" Margin="3, 0" Click="btnOK_Click">
                 OK
                 <Button.Style>

@@ -53,22 +53,6 @@ namespace FileSelector.Data
 			}
 		}
 
-		public bool Find(string path)
-		{
-			bool doesPathExisit = System.IO.Directory.Exists(path);
-			if (doesPathExisit)
-			{
-				string[] splittedPath = path.Split('\\');
-
-				foreach(string item in splittedPath)
-				{
-					//Root.
-				}
-			}
-
-			return false;
-		}
-
 		#region INotifyPropertyChanged
 		public event PropertyChangedEventHandler PropertyChanged;
 

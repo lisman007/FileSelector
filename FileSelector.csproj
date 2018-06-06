@@ -55,6 +55,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\AsyncObservableCollection.cs" />
     <Compile Include="Data\ItemsManager.cs" />
     <Compile Include="Utils\SystemIconManager.cs" />
     <Page Include="FolderSelector.xaml">

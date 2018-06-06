@@ -34,7 +34,7 @@ namespace FileSelector
 			set
 			{
 				string initialPath = value;
-				BaseItem foundItem = (DataContext as BaseItem).Find(initialPath);
+				BaseItem foundItem = (DataContext as BaseItem).FindFullPath(initialPath);
 			}
 		}
 
@@ -54,21 +54,27 @@ namespace FileSelector
 		}
 		#endregion
 
+		#region CTOR
 		public FolderSelector()
 		{
 			InitializeComponent();
 
 			DataContext = new ItemsManager().Root;
 		}
+		#endregion
 
+		#region UI events
 		private void btnClose_Click(object sender, RoutedEventArgs e)
 		{
+			DialogResult = false;
 			Close();
 		}
 
 		private void btnOK_Click(object sender, RoutedEventArgs e)
 		{
 			SelectedPath = tbSelectedFolder.Text;
+
+			DialogResult = true;
 			Close();
 		}
 
@@ -77,7 +83,6 @@ namespace FileSelector
 			TreeViewItem tvi = e.OriginalSource as TreeViewItem;
 			tvi.BringIntoView();
 		}
-
-		
+		#endregion
 	}
 }

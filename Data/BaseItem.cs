@@ -16,6 +16,8 @@ namespace FileSelector.Data
 	public class BaseItem : INotifyPropertyChanged, INotifyCollectionChanged
 	{
 		#region Data members
+		private System.IO.FileSystemWatcher _watcher = new System.IO.FileSystemWatcher();
+
 		private string _path;
 		private bool _isExpanded = false;
 		private bool _isSelected = false;
@@ -54,6 +56,7 @@ namespace FileSelector.Data
 			{
 				_path = value;
 				OnPropertyChanged("Path");
+				OnPropertyChanged("Name");
 			}
 		}
 
@@ -72,6 +75,16 @@ namespace FileSelector.Data
 				{
 					foreach (BaseItem item in Items)
 						item.LoadItemsContent(false);
+
+
+					_watcher.Path = Path;
+
+					if (!string.IsNullOrEmpty(Path))
+						_watcher.EnableRaisingEvents = true;
+				}
+				else
+				{
+					_watcher.EnableRaisingEvents = false;
 				}
 			}
 		}
@@ -97,7 +110,7 @@ namespace FileSelector.Data
 				return _items;
 			}
 
-			set
+			private set
 			{
 				_items = value;
 				OnPropertyChanged("Items");
@@ -117,15 +130,25 @@ namespace FileSelector.Data
 		#region Collection
 		public void Add(BaseItem item)
 		{
-			if (!_items.Contains(item))
+			if (!Contains(item))
 			{
 				_items.Add(item);
 				OnCollectionChanged(NotifyCollectionChangedAction.Add);
 				OnPropertyChanged("Items");
 			}
 		}
+
+		public void Remove(BaseItem item)
+		{
+			if (_items.Contains(item))
+			{
+				_items.Remove(item);
+				OnCollectionChanged(NotifyCollectionChangedAction.Remove);
+				OnPropertyChanged("Items");
+			}
+		}
 		
-		public BaseItem Contains(string itemName)
+		public BaseItem GetChildItem(string itemName)
 		{
 			if (Items.Count == 0)
 				LoadItemsContent(false);
@@ -139,7 +162,21 @@ namespace FileSelector.Data
 			return null;
 		}
 
-		public BaseItem Find(string path)
+		public bool Contains(BaseItem searchItem)
+		{
+			if (searchItem == null)
+				return false;
+
+			foreach (BaseItem item in Items)
+			{
+				if ((searchItem.Name == item.Name) && (searchItem.Path == item.Path))
+					return true;
+			}
+
+			return false;
+		}
+
+		public BaseItem FindFullPath(string path)
 		{
 			List<string> pathItems = path.Split('\\').ToList();
 
@@ -149,8 +186,6 @@ namespace FileSelector.Data
 
 			return foundItem;
 		}
-			
-		
 		#endregion
 
 		#region CTORs
@@ -162,10 +197,18 @@ namespace FileSelector.Data
 		private BaseItem(string path, bool getNextLevel = false)
 		{
 			Path = path;
-			Items = new ObservableCollection<BaseItem>();
+			Items = new AsyncObservableCollection<BaseItem>();
 
 			if (!string.IsNullOrEmpty(Path) && getNextLevel)
 				LoadItemsContent(false);
+
+			_watcher.NotifyFilter = System.IO.NotifyFilters.LastAccess | System.IO.NotifyFilters.LastWrite | System.IO.NotifyFilters.FileName | System.IO.NotifyFilters.DirectoryName;
+			_watcher.EnableRaisingEvents = false;
+
+			_watcher.Created += _watcher_Created;
+			_watcher.Changed += _watcher_Changed;
+			_watcher.Renamed += _watcher_Renamed;
+			_watcher.Deleted += _watcher_Deleted;
 		}
 		#endregion
 
@@ -192,7 +235,9 @@ namespace FileSelector.Data
 				foreach (string directory in directories)
 				{
 					BaseItem directoryItem = new BaseItem(directory, getNextLevel);
-					Items.Add(directoryItem);
+
+					//if (!Items.Contains(directoryItem))
+					Add(directoryItem);
 				}
 			}
 		}
@@ -201,7 +246,7 @@ namespace FileSelector.Data
 		{
 			if (pathItems.Count >= 1)
 			{
-				BaseItem item = Contains(pathItems[0]);
+				BaseItem item = GetChildItem(pathItems[0]);
 				if (item != null)
 				{
 					IsExpanded = true;  //Expand this, which is the item's parent
@@ -237,5 +282,41 @@ namespace FileSelector.Data
 				CollectionChanged(this, new NotifyCollectionChangedEventArgs(action));
 		}
 		#endregion INotifyCollectionChanged
+
+		#region Events
+		private void _watcher_Deleted(object sender, System.IO.FileSystemEventArgs e)
+		{
+			BaseItem item = GetChildItem(e.Name);
+			if (item != null)
+				Remove(item);
+		}
+
+		private void _watcher_Renamed(object sender, System.IO.RenamedEventArgs e)
+		{
+			BaseItem item = GetChildItem(e.OldName);
+			if (item != null)
+				item.Path = e.FullPath;
+		}
+
+		private void _watcher_Changed(object sender, System.IO.FileSystemEventArgs e)
+		{
+			BaseItem item = GetChildItem(e.Name);
+			if (item != null)
+				item.LoadItemsContent(false);
+		}
+
+		private void _watcher_Created(object sender, System.IO.FileSystemEventArgs e)
+		{
+			BaseItem item = new BaseItem(e.FullPath);
+			Add(item);
+		}
+		#endregion
+
+		#region General overrides
+		public override string ToString()
+		{
+			return Name + " (" + Path + ")";
+		}
+		#endregion
 	}
 }
