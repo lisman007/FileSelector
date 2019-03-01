@@ -76,7 +76,6 @@ namespace FileSelector.Data
 					foreach (BaseItem item in Items)
 						item.LoadItemsContent(false);
 
-
 					_watcher.Path = Path;
 
 					if (!string.IsNullOrEmpty(Path))
