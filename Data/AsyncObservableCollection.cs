@@ -27,12 +27,12 @@ namespace FileSelector.Data
 		#region Override ObservableCollection events
 		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
 		{
-			if (_syncContext == SynchronizationContext.Current)
+			if ((_syncContext == SynchronizationContext.Current) && (_syncContext != null))
 			{
 				//Execute the CollectionChanged event on the current thread
 				RunCollectionChanged(e);
 			}
-			else
+			else if (_syncContext != null)
 			{
 				//Execute the CollectionChanged event on the creator thread
 				_syncContext.Send(RunCollectionChanged, e);
@@ -41,13 +41,13 @@ namespace FileSelector.Data
 
 		protected override void OnPropertyChanged(PropertyChangedEventArgs e)
 		{
-			if (_syncContext == SynchronizationContext.Current)
-			{
+            if ((_syncContext == SynchronizationContext.Current) && (_syncContext != null))
+            {
 				//Execute the PropertyChanged event on the current thread
 				RunPropertyChanged(e);
 			}
-			else
-			{
+            else if (_syncContext != null)
+            {
 				//Execute the PropertyChanged event on the creator thread
 				_syncContext.Send(RunPropertyChanged, e);
 			}

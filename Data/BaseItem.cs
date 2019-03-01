@@ -177,7 +177,7 @@ namespace FileSelector.Data
 
 		public BaseItem FindFullPath(string path)
 		{
-			List<string> pathItems = path.Split('\\').ToList();
+			List<string> pathItems = path.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
 			BaseItem foundItem = Find(pathItems);
 			if (foundItem != null)

@@ -25,7 +25,7 @@
 
         <TextBlock Margin="3">Select a folder:</TextBlock>
 
-        <TreeView Grid.Row="1" Margin="3, 0" x:Name="tvFolders" ItemsSource="{Binding Items, Mode=TwoWay}" HorizontalAlignment="Stretch"
+        <TreeView Grid.Row="1" Margin="3, 0" x:Name="tvFolders" ItemsSource="{Binding Items, Mode=OneWay}" HorizontalAlignment="Stretch"
                   BorderBrush="Gray" TreeViewItem.Selected="tvFolders_Selected">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
@@ -34,7 +34,7 @@
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type local_data:BaseItem}" ItemsSource="{Binding Items, Mode=TwoWay}">
+                <HierarchicalDataTemplate DataType="{x:Type local_data:BaseItem}" ItemsSource="{Binding Items, Mode=OneWay}">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                         <Image Source="{Binding ItemIcon}" Stretch="None" Margin="0, 1" HorizontalAlignment="Center" />
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="3, 0" />
@@ -50,7 +50,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock VerticalAlignment="Center">Folder:</TextBlock>
-            <TextBox x:Name="tbSelectedFolder" Grid.Column="1" Margin="3, 0, 0, 0" Text="{Binding ElementName=tvFolders, Path=SelectedItem.Path}" IsReadOnly="True"/>
+            <TextBox x:Name="tbSelectedFolder" Grid.Column="1" Margin="3, 0, 0, 0" Text="{Binding ElementName=tvFolders, Path=SelectedItem.Path, Mode=OneWay}" IsReadOnly="True"/>
         </Grid>
 
         <Grid Grid.Row="3" Margin="3, 0, 3, 3">
